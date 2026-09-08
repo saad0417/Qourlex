@@ -1,0 +1,292 @@
+/* -------------------------------------------------------------------------
+   Epic Pro (GC EPICPRO Demo Extra Bold, Glyphonic).
+
+   LICENCE: the supplied file is the DEMO cut, which its READ-ME limits to
+   PERSONAL USE. This site is commercial, so a licence has to be bought from
+   the foundry before launch. See src/assets/fonts/EpicPro-LICENSE.txt.
+
+   The demo cut also ships only A-Z, a-z, 0-9 and . , ? ! & — it has no
+   apostrophe, hyphen, colon or slash. Three section headings contain an
+   apostrophe, so Clash Display sits next in the stack and picks up exactly
+   those glyphs; it is the closest match to Epic Pro's proportions.
+
+   Declared across the full weight range so every heading gets the real face
+   and the browser never synthesises a fake bold on top of an already
+   extra-bold design.
+   ---------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-ExtraBold.ttf') format('truetype');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+/* -------------------------------------------------------------------------
+   Typography — Clash Display for every major heading, Inter for body copy.
+   ---------------------------------------------------------------------- */
+@layer base {
+  h1,
+  h2 {
+    font-family: 'Epic Pro', 'Clash Display', 'Syne', 'Inter', system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Neither Epic Pro nor Clash Display ships a true italic, so the browser
+   synthesises an oblique by skewing the upright. background-clip: text paints only inside the element's
+   background box, and a skewed glyph leans past its own advance width — so the
+   trailing edge of the last letter gets shaved off. The padding widens the
+   paint box to cover the lean; box-decoration-break: clone re-applies it at
+   every line fragment (otherwise a span that wraps is only padded on its final
+   line); and the negative margin gives the space back so nothing shifts. */
+.clip-safe {
+  padding-right: 0.2em;
+  margin-right: -0.2em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+html {
+  scroll-behavior: auto; /* Managed smoothly by Lenis */
+  background-color: #030712;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #030712;
+  color: #E2E8F0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #030712;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Accessible focus styling */
+:focus-visible {
+  outline: 2px solid #4F46E5 !important;
+  outline-offset: 2px !important;
+}
+
+/* Skip to content link */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 20px;
+  background: #4F46E5;
+  color: #ffffff;
+  padding: 12px 20px;
+  z-index: 1000;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 20px;
+}
+
+/* =========================================================================
+   APPLE iOS / VISIONOS REFINED GLASSMORPHISM SYSTEM
+   ========================================================================= */
+
+/* Base Glass Container */
+.apple-glass {
+  background: rgba(30, 41, 59, 0.45);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 0 16px 0 rgba(255, 255, 255, 0.02),
+    0 20px 40px -15px rgba(0, 0, 0, 0.6);
+}
+
+/* Interactive Card Glass */
+.apple-glass-card {
+  background: rgba(30, 41, 59, 0.42);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow:
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 0 20px 0 rgba(255, 255, 255, 0.015),
+    0 25px 50px -18px rgba(0, 0, 0, 0.65);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.apple-glass-card:hover {
+  background: rgba(51, 65, 85, 0.52);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow:
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 0 24px 0 rgba(79, 70, 229, 0.15),
+    0 30px 60px -15px rgba(0, 0, 0, 0.75),
+    0 0 35px -10px rgba(79, 70, 229, 0.3);
+}
+
+/* Navigation Apple Liquid Glass */
+.apple-glass-nav {
+  background: rgba(3, 7, 18, 0.68);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.12),
+    0 10px 30px -10px rgba(0, 0, 0, 0.6);
+}
+
+/* Glass Pill / Badges */
+.apple-glass-pill {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0.5px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* Specular border shine */
+.specular-highlight {
+  position: relative;
+}
+
+.specular-highlight::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  pointer-events: none;
+}
+
+/* 3D Perspective utilities */
+.perspective-stage {
+  perspective: 1400px;
+  perspective-origin: 50% 50%;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* Lenis smooth scroll recommended CSS */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================================================================
+   HERO SPHERE CLUSTER
+   The WebGL canvas sits behind every hero element and is inert to the pointer,
+   so nav links, buttons and CTAs above it stay clickable. The cursor is tracked
+   on the window instead, which is why the effect still works.
+   ========================================================================= */
+.hero-spheres {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-spheres canvas {
+  display: block;
+  pointer-events: none !important;
+}
+
+/* The blue-to-violet bloom the cluster sits inside, behind the canvas. */
+.hero-spheres__glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 55% at 72% 45%, rgba(79, 70, 229, 0.34) 0%, rgba(124, 58, 237, 0.16) 45%, transparent 72%),
+    radial-gradient(45% 45% at 30% 62%, rgba(37, 99, 235, 0.16) 0%, transparent 70%);
+}
+
+/* Below the split breakpoint the cluster sits behind centred copy, so it steps
+   back to keep the headline the clear focal point. */
+@media (max-width: 1023px) {
+  .hero-spheres {
+    opacity: 0.5;
+  }
+  .hero-spheres__glow {
+    background: radial-gradient(60% 50% at 50% 45%, rgba(79, 70, 229, 0.28) 0%, rgba(124, 58, 237, 0.12) 48%, transparent 72%);
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-spheres {
+    opacity: 0.32;
+  }
+}
+
+/* Client strip scrolls horizontally on phones; hide the bar, keep the motion. */
+.client-strip {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.client-strip::-webkit-scrollbar {
+  display: none;
+}
