@@ -18,11 +18,11 @@ static files that deploys straight to Vercel.
 | --- | --- |
 | Framework | React 19 + Vite 8 |
 | Styling | Tailwind CSS 3 with the Qourlex design tokens |
-| Hero background | Three.js `Points` + `LineSegments` driven by custom GLSL |
+| Hero background | React Three Fiber + drei, instanced glossy sphere cluster |
 | Scroll | Lenis inertial scrolling synced to GSAP ScrollTrigger |
 | Icons | Lucide React plus hand-rolled brand SVGs |
 | Email | EmailJS (client side) |
-| Headings | Clash Display (Fontshare) |
+| Headings | Epic Pro, with Clash Display as the fallback |
 | Body text | Inter (Google Fonts) |
 
 ---
@@ -52,7 +52,7 @@ qourlex-website/
 │   ├── components/
 │   │   ├── Navbar.jsx           Glassmorphism header and mobile overlay
 │   │   ├── Hero.jsx             Headline, CTAs, trust strip
-│   │   ├── ParticleField.jsx    Cursor-reactive 3D particle background
+│   │   ├── HeroSpheres.jsx      Cursor-reactive 3D sphere cluster
 │   │   ├── Problem.jsx          Missed-call pain point and stats
 │   │   ├── AnimatedCounter.jsx  GSAP ScrollTrigger count-up
 │   │   ├── HowItWorks.jsx       Three-step workflow
@@ -71,6 +71,7 @@ qourlex-website/
 │   ├── utils/
 │   │   └── emailjs.js           Contact form delivery
 │   ├── assets/
+│   │   └── fonts/               Epic Pro (see the licence note below)
 │   ├── App.jsx                  Root layout and Lenis coordinator
 │   ├── index.css                Tailwind layers, glass system, hero field CSS
 │   └── main.jsx
@@ -84,71 +85,69 @@ qourlex-website/
 
 ---
 
-## The hero particle field
+## The hero sphere cluster
 
-`src/components/ParticleField.jsx` renders the hero background. Every tunable
-number lives in the `CONFIG` object at the top of the file.
+`src/components/HeroSpheres.jsx` renders the hero background with React Three
+Fiber. Every tunable number lives in the `CONFIG` object at the top of the file.
 
 **What it does**
 
-- A jittered grid of ~3000 points (800 on mobile) fills a slab in front of the
-  camera. A grid rather than pure noise keeps coverage even, with a random
-  offset per point so it still reads as organic.
-- Points drift on slow sine waves, and the whole cloud turns on Y at 0.0003
-  radians per frame.
-- The cursor repels nearby points. Anything within 3.0 world units is pushed
-  outward along XY, hardest at the centre, easing to nothing at the rim.
-- Roughly 500 of the closest point pairs are joined by faint white lines. Lines
-  stretch as the cursor parts the field and fade out once overstretched.
-- Exponential-squared fog and perspective size attenuation give depth; a CSS
-  radial gradient feathers the whole thing into the page background.
+- 155 glossy spheres sit on a Fibonacci-distributed shell, which gives even
+  coverage with no polar clumping. A little radial jitter keeps it organic.
+- A glowing core sits inside the shell, visible wherever the cluster opens.
+- The cluster turns slowly on Y and every ball bobs on its own sine wave.
+- The cursor repels nearby balls. Each one eases toward a target position each
+  frame rather than jumping, so the cluster parts like something with weight and
+  drifts home once the cursor leaves.
+- On desktop the cluster sits right of centre and the headline takes the left.
+  Below 1024px it centres behind the copy, dropped in opacity and covered by a
+  scrim so the headline stays the focal point.
 
 **How it stays fast**
 
-- All displacement happens in the vertex shader. Per frame the CPU only updates
-  a handful of uniforms — no buffer uploads, no per-particle JavaScript.
-- Points and lines share one GLSL displacement function, so a line always tracks
-  its two endpoints exactly. Each line vertex carries the opposite endpoint as
-  an attribute, which lets it measure the segment's true current length on the
-  GPU.
-- Link topology is built once at startup through a uniform spatial hash, so it
-  costs O(n) rather than a full pairwise scan.
-- Device pixel ratio is capped at 1.5. Under 768px wide the field drops to 800
-  points with no lines and no cursor interaction.
-- Rendering pauses when the hero scrolls offscreen or the tab is hidden, and
-  frame deltas are clamped so a backgrounded tab never resumes with a jump.
-- `prefers-reduced-motion: reduce` draws a single static frame and starts no
-  animation loop at all.
-- Everything is disposed on unmount, including a WebGL context release.
+- All 155 spheres are one `InstancedMesh`, so the cluster is a single draw call.
+  Per-ball colour rides on the instance colour buffer.
+- The frame loop writes matrices into that buffer and nothing else. No React
+  state is touched, and pointer moves never trigger a render.
+- Device pixel ratio is capped at `[1, 1.5]`. Under 768px the cluster drops to
+  28 spheres at lower tessellation, skips the reflection probe, and turns the
+  cursor interaction off entirely.
+- Reflections come from an `Environment` built out of `Lightformer` rectangles
+  rather than one of drei's HDR presets. The presets stream several megabytes
+  from a third-party CDN on every visit, which is a bad trade for a background.
+- `prefers-reduced-motion: reduce` holds the cluster still.
+- React Three Fiber disposes the scene when the canvas unmounts.
 
-**Two things worth knowing if you edit it**
-
-- Colours are converted with `linearToOutputTexel()` in the fragment shader.
-  `THREE.Color` yields linear values and three.js only inserts that conversion
-  into its own materials, so a custom `ShaderMaterial` that skips it renders
-  roughly four times too dark.
-- The repulsion falloff is written `1.0 - smoothstep(0.0, radius, dist)` rather
-  than `smoothstep(radius, 0.0, dist)`. The reversed form is undefined behaviour
-  in the GLSL ES spec even though it happens to work on most drivers.
-
----
+**Measured** on an Intel UHD Graphics (CML GT2) at 1440x900: 60fps with a median
+frame of 16.7ms, both idle and with the cursor sweeping the cluster. Mobile
+viewport on the same GPU: 57fps.
 
 ## Typography
 
-Headings use **Clash Display**. It is a Fontshare release, so it is not on
-Google Fonts and there is no `@fontsource/clash-display` package — it loads from
-the foundry CDN in `index.html`. Body copy uses **Inter**.
+Headings use **Epic Pro**, loaded from `src/assets/fonts/`. Body copy uses
+**Inter**.
+
+Two things to know about the supplied font file:
+
+- **It is the demo cut, licensed for personal use only.** The foundry's read-me
+  is kept alongside it at `src/assets/fonts/EpicPro-LICENSE.txt`. A commercial
+  licence has to be bought from Glyphonic before this site goes live.
+- **The demo cut has no apostrophe.** It ships A-Z, a-z, 0-9 and `. , ? ! &`
+  only. Three section headings contain an apostrophe, so **Clash Display** sits
+  next in the stack and supplies exactly those glyphs. It is the closest match
+  to Epic Pro's proportions, so the substitution is not obvious.
+
+Epic Pro also draws its lowercase letters as capitals, so headings render in all
+caps regardless of how they are typed in the JSX.
 
 Every `h1` and `h2` picks up the display face from a base layer rule in
 `src/index.css`, and components also carry an explicit `font-display` class so
 the intent is visible in the markup.
 
-Clash Display ships no true italic, so the hero headline uses a browser
+Neither face ships a true italic, so the hero headline uses a browser
 synthesised oblique. Because a skewed glyph leans past its own advance width,
 the gradient span carries a `.clip-safe` helper that widens the
 `background-clip: text` paint box so the last letter is not shaved off.
-
----
 
 ## Contact form
 

@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Environment, Lightformer } from '@react-three/drei';
 import * as THREE from 'three';
@@ -10,10 +10,10 @@ const CONFIG = {
   camera: { fov: 50, position: [0, 0, 10], near: 0.1, far: 100 },
 
   desktop: {
-    count: 155,
-    segments: 28,
+    count: 155,          // shell needs this many to read as a solid cluster
+    segments: 20,        // visually identical to 28 at the size these render
     cursor: true,
-    environment: false,
+    environment: true,
   },
   mobile: {
     count: 28,
@@ -60,60 +60,81 @@ const DEG2RAD = Math.PI / 180;
 /* Frame-rate independent form of "lerp by f every frame at 60fps". */
 const damp = (f, dt) => 1 - Math.pow(1 - f, dt * 60);
 
+/* Deterministic PRNG (mulberry32). The cluster is built inside a useMemo, and
+   React is free to throw a memo away and recompute it — with Math.random that
+   would silently reshuffle every ball. Seeding makes the layout reproducible
+   and keeps the render pure. */
+const makeRandom = (seed) => {
+  let t = seed >>> 0;
+  return () => {
+    t = (t + 0x6d2b79f5) >>> 0;
+    let x = Math.imul(t ^ (t >>> 15), 1 | t);
+    x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x;
+    return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+  };
+};
+
+/* Builds the shell. Fibonacci distribution spreads the balls evenly with no
+   seams or polar clumping; the jitter keeps it from looking mathematical. */
+function buildSpheres(count, seed) {
+  const random = makeRandom(seed);
+  const golden = Math.PI * (3 - Math.sqrt(5));
+  const colorA = new THREE.Color(CONFIG.palette[0]);
+  const colorB = new THREE.Color(CONFIG.palette[1]);
+  const items = [];
+
+  for (let i = 0; i < count; i++) {
+    const y = 1 - (i / Math.max(count - 1, 1)) * 2;
+    const ringRadius = Math.sqrt(Math.max(1 - y * y, 0));
+    const theta = golden * i;
+
+    const shell =
+      CONFIG.cluster.shellRadius +
+      (random() - 0.5) * 2 * CONFIG.cluster.radiusJitter;
+
+    const base = new THREE.Vector3(
+      Math.cos(theta) * ringRadius * shell,
+      y * shell,
+      Math.sin(theta) * ringRadius * shell
+    );
+
+    items.push({
+      base,
+      current: base.clone(),
+      target: new THREE.Vector3(),
+      ballRadius:
+        CONFIG.cluster.minBall +
+        random() * (CONFIG.cluster.maxBall - CONFIG.cluster.minBall),
+      color: colorA.clone().lerp(colorB, random()),
+      phase: random() * Math.PI * 2,
+    });
+  }
+  return items;
+}
+
 /* ---------------------------------------------------------------------------
  * The cluster: one InstancedMesh, so 140 glossy balls cost a single draw call.
  * ------------------------------------------------------------------------ */
-function SphereCluster({ profile, pointer, offsetFraction, reducedMotion }) {
+function SphereCluster({ pointerRef, profile, offsetFraction, reducedMotion }) {
   const meshRef = useRef(null);
   const groupRef = useRef(null);
   const { viewport, camera } = useThree();
 
   const count = profile.count;
 
-  // Fibonacci distribution puts the balls evenly over the shell with no seams
-  // or polar clumping, then a little jitter keeps it organic.
-  const spheres = useMemo(() => {
-    const golden = Math.PI * (3 - Math.sqrt(5));
-    const colorA = new THREE.Color(CONFIG.palette[0]);
-    const colorB = new THREE.Color(CONFIG.palette[1]);
-    const items = [];
+  // The sphere records are mutable per-instance state that the frame loop
+  // rewrites every tick, so they belong in a ref rather than a memo. Colours
+  // are uploaded here too, once, because they never change afterwards.
+  const spheresRef = useRef(null);
+  useLayoutEffect(() => {
+    const spheres = buildSpheres(count, 0x5eed1234);
+    spheresRef.current = spheres;
 
-    for (let i = 0; i < count; i++) {
-      const y = 1 - (i / Math.max(count - 1, 1)) * 2;
-      const ringRadius = Math.sqrt(Math.max(1 - y * y, 0));
-      const theta = golden * i;
-
-      const shell =
-        CONFIG.cluster.shellRadius +
-        (Math.random() - 0.5) * 2 * CONFIG.cluster.radiusJitter;
-
-      const base = new THREE.Vector3(
-        Math.cos(theta) * ringRadius * shell,
-        y * shell,
-        Math.sin(theta) * ringRadius * shell
-      );
-
-      items.push({
-        base,
-        current: base.clone(),
-        target: new THREE.Vector3(),
-        ballRadius:
-          CONFIG.cluster.minBall +
-          Math.random() * (CONFIG.cluster.maxBall - CONFIG.cluster.minBall),
-        color: colorA.clone().lerp(colorB, Math.random()),
-        phase: Math.random() * Math.PI * 2,
-      });
-    }
-    return items;
-  }, [count]);
-
-  // Per-instance colour, uploaded once.
-  useEffect(() => {
     const mesh = meshRef.current;
     if (!mesh) return;
     spheres.forEach((s, i) => mesh.setColorAt(i, s.color));
     if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
-  }, [spheres]);
+  }, [count]);
 
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const cursorWorld = useMemo(() => new THREE.Vector3(), []);
@@ -129,7 +150,8 @@ function SphereCluster({ profile, pointer, offsetFraction, reducedMotion }) {
   useFrame((state, rawDelta) => {
     const mesh = meshRef.current;
     const group = groupRef.current;
-    if (!mesh || !group) return;
+    const spheres = spheresRef.current;
+    if (!mesh || !group || !spheres) return;
 
     const delta = Math.min(rawDelta, 0.05);
     const time = state.clock.elapsedTime;
@@ -140,6 +162,7 @@ function SphereCluster({ profile, pointer, offsetFraction, reducedMotion }) {
 
     // Pointer eases toward its target first, which is what makes the parting
     // feel like it has weight instead of snapping to the cursor.
+    const pointer = pointerRef.current;
     pointer.x += (pointer.targetX - pointer.x) * damp(CONFIG.cursorField.pointerLerp, delta);
     pointer.y += (pointer.targetY - pointer.y) * damp(CONFIG.cursorField.pointerLerp, delta);
     pointer.amount += (pointer.targetAmount - pointer.amount) * damp(0.05, delta);
@@ -219,7 +242,7 @@ function SphereCluster({ profile, pointer, offsetFraction, reducedMotion }) {
         args={[undefined, undefined, count]}
         frustumCulled={false}
       >
-        <sphereGeometry args={[1, 8, 8]} />
+        <sphereGeometry args={[1, profile.segments, profile.segments]} />
         <meshStandardMaterial
           metalness={0.3}
           roughness={0.2}
@@ -234,7 +257,7 @@ function SphereCluster({ profile, pointer, offsetFraction, reducedMotion }) {
 
 /* ------------------------------------------------------------------------ */
 
-function Scene({ profile, pointer, offsetFraction, reducedMotion }) {
+function Scene({ pointerRef, profile, offsetFraction, reducedMotion }) {
   return (
     <>
       <ambientLight intensity={0.4} />
@@ -245,7 +268,7 @@ function Scene({ profile, pointer, offsetFraction, reducedMotion }) {
 
       <SphereCluster
         profile={profile}
-        pointer={pointer}
+        pointerRef={pointerRef}
         offsetFraction={offsetFraction}
         reducedMotion={reducedMotion}
       />
@@ -300,9 +323,10 @@ export const HeroSpheres = () => {
   const [offsetFraction, setOffsetFraction] = useState(CONFIG.offsetFraction.desktop);
   const [reducedMotion, setReducedMotion] = useState(false);
 
-  // Pointer state is a plain mutable object so mousemove never triggers a
-  // React render; the frame loop reads it directly.
-  const pointer = useRef({ x: 0, y: 0, targetX: 0, targetY: 0, amount: 0, targetAmount: 0 }).current;
+  // Pointer state lives in a ref so mousemove never triggers a React render;
+  // the frame loop reads and writes it directly. The ref object itself is what
+  // gets passed down — never its contents, which would be a read during render.
+  const pointerRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0, amount: 0, targetAmount: 0 });
 
   useEffect(() => {
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -333,7 +357,7 @@ export const HeroSpheres = () => {
 
   useEffect(() => {
     if (!cursorEnabled) {
-      pointer.targetAmount = 0;
+      pointerRef.current.targetAmount = 0;
       return undefined;
     }
     // The canvas is pointer-events: none so buttons stay clickable, so the
@@ -348,6 +372,7 @@ export const HeroSpheres = () => {
       const ny = -(((event.clientY - rect.top) / rect.height) * 2 - 1);
       const inside = nx >= -1 && nx <= 1 && ny >= -1 && ny <= 1;
 
+      const pointer = pointerRef.current;
       if (inside) {
         pointer.targetX = nx;
         pointer.targetY = ny;
@@ -357,7 +382,7 @@ export const HeroSpheres = () => {
 
     window.addEventListener('pointermove', handleMove, { passive: true });
     return () => window.removeEventListener('pointermove', handleMove);
-  }, [cursorEnabled, pointer]);
+  }, [cursorEnabled]);
 
   // Nothing renders until the media queries have been read, which keeps the
   // scene from mounting once at the wrong size and rebuilding.
@@ -375,11 +400,14 @@ export const HeroSpheres = () => {
       >
         <Scene
           profile={profile}
-          pointer={pointer}
+          pointerRef={pointerRef}
           offsetFraction={offsetFraction}
           reducedMotion={reducedMotion}
         />
       </Canvas>
+      {/* Below the split breakpoint the copy sits on top of the cluster, so a
+          scrim goes over the canvas to keep the headline legible. */}
+      <div className="hero-spheres__scrim" />
     </div>
   );
 };
