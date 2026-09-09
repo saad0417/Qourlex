@@ -96,7 +96,7 @@ export const Footer = () => {
                 <InstagramIcon className="w-4 h-4" />
               </a>
               <a
-                href="https://facebook.com/qourlexai"
+                href="https://www.facebook.com/qourlex"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
