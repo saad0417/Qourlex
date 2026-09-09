@@ -59,7 +59,7 @@ export const Footer = () => {
             <p className="flex items-center gap-2 text-sm text-[#94A3B8]">
               <Mail className="w-4 h-4 text-accent-primary flex-shrink-0" />
               <a
-                href="mailto:saadakhtar2222@gmail.com"
+                href="mailto:qourlexai@gmail.com"
                 className="hover:text-white transition-colors"
               >
                 qourlexai@gmail.com

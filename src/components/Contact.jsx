@@ -310,10 +310,10 @@ export const Contact = () => {
                     Email Us
                   </h4>
                   <a
-                    href="mailto:saadakhtar2222@gmail.com"
+                    href="mailto:qourlexai@gmail.com"
                     className="inline-block py-1.5 -my-1.5 text-text-link hover:underline text-[13px] xs:text-sm sm:text-base font-medium transition-colors break-all"
                   >
-                    saadakhtar2222@gmail.com
+                    qourlexai@gmail.com
                   </a>
                 </div>
               </div>
