@@ -62,7 +62,7 @@ export const Footer = () => {
                 href="mailto:saadakhtar2222@gmail.com"
                 className="hover:text-white transition-colors"
               >
-                saadakhtar2222@gmail.com
+                qourlexai@gmail.com
               </a>
             </p>
             <p className="flex items-center gap-2 text-sm text-[#94A3B8]">
