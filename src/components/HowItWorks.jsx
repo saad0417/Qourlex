@@ -23,14 +23,9 @@ export const HowItWorks = () => {
       });
 
       if (pathRef.current) {
-        const length = pathRef.current.getTotalLength ? pathRef.current.getTotalLength() : 600;
-        gsap.set(pathRef.current, {
-          strokeDasharray: length,
-          strokeDashoffset: length,
-        });
-
+        gsap.set(pathRef.current, { scaleX: 0, transformOrigin: 'left center' });
         tl.to(pathRef.current, {
-          strokeDashoffset: 0,
+          scaleX: 1,
           duration: 1.2,
           ease: 'power2.inOut',
         });
@@ -90,7 +85,7 @@ export const HowItWorks = () => {
     <section
       id="how-it-works"
       ref={containerRef}
-      className="bg-primary-bg py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
+      className="bg-primary-bg py-20 sm:py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
       aria-label="How It Works"
     >
       <div className="max-w-7xl mx-auto">
@@ -109,18 +104,15 @@ export const HowItWorks = () => {
 
         {/* Steps Container */}
         <div className="relative">
-          {/* Desktop SVG Connecting Line */}
-          <div className="hidden md:block absolute top-8 left-[16%] right-[16%] h-2 pointer-events-none z-0">
-            <svg className="w-full h-4 overflow-visible" preserveAspectRatio="none">
-              <path
-                ref={pathRef}
-                d="M 0 8 L 800 8"
-                stroke="#334155"
-                strokeWidth="2"
-                strokeDasharray="6 6"
-                fill="none"
-              />
-            </svg>
+          {/* Desktop rail. Spans centre-to-centre of the outer step circles
+              (the 3 columns put those at 1/6 and 5/6) and is masked at both
+              ends so it fades out instead of butting into them. The old fixed
+              800px SVG path did not track the container width. */}
+          <div
+            className="hidden md:block absolute top-8 left-[16.666%] right-[16.666%] h-0.5 pointer-events-none z-0"
+            aria-hidden="true"
+          >
+            <div ref={pathRef} className="step-rail step-rail--h h-full w-full" />
           </div>
 
           {/* Steps Grid */}
@@ -133,10 +125,12 @@ export const HowItWorks = () => {
                   ref={(el) => { stepsRef.current[idx] = el; }}
                   className="flex flex-col items-center text-center relative"
                 >
-                  {/* Mobile Vertical Connecting Line */}
+                  {/* Mobile connector. Sits in the 48px grid gap below the
+                      card (top-full, h-12) so it links the steps without ever
+                      crossing the title or the description. */}
                   {idx < steps.length - 1 && (
                     <div
-                      className="md:hidden absolute top-16 bottom-[-48px] left-1/2 -translate-x-1/2 w-0.5 border-l-2 border-dashed border-border-divider -z-10"
+                      className="step-rail step-rail--v md:hidden absolute left-1/2 top-full h-12 w-0.5 -translate-x-1/2"
                       aria-hidden="true"
                     />
                   )}
@@ -158,12 +152,12 @@ export const HowItWorks = () => {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-2xl font-semibold text-white mb-3">
+                  <h3 className="text-xl sm:text-2xl font-semibold text-white mb-3 text-balance">
                     {step.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-text-muted text-base leading-relaxed max-w-sm">
+                  <p className="text-text-muted text-[15px] sm:text-base leading-relaxed max-w-sm text-pretty">
                     {step.description}
                   </p>
                 </div>

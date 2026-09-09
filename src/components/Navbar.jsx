@@ -80,7 +80,7 @@ export const Navbar = () => {
       >
         <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           {/* Brand Logo */}
-          <div className="flex-shrink-0">
+          <div className="min-w-0">
             <Logo />
           </div>
 
@@ -128,14 +128,14 @@ export const Navbar = () => {
           </div>
 
           {/* Mobile Hamburger Button */}
-          <div className="flex md:hidden items-center">
+          <div className="flex md:hidden items-center shrink-0">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2.5 rounded-xl text-[#94A3B8] hover:text-white apple-glass-pill transition-colors focus:outline-none"
+              className="nav-burger flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white transition-colors focus:outline-none active:scale-95"
               aria-label={mobileMenuOpen ? 'Close Menu' : 'Open Menu'}
               aria-expanded={mobileMenuOpen}
             >
-              {mobileMenuOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>

@@ -32,13 +32,20 @@ export const Hero = () => {
           intercepts pointer events, so all links and buttons stay clickable. */}
       <HeroSpheres />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-12 items-center">
-          {/* Copy column. Centred until the split layout kicks in at lg. */}
-          <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-            <div className="inline-flex items-center gap-2 rounded-full border border-accent-primary/25 bg-accent-primary/10 px-3.5 py-1.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-[2px] sm:tracking-[2.5px] text-accent-primary mb-7">
+          {/* Copy column. Centred until the split layout kicks in at lg, and
+              below that it sits on a frosted panel: the sphere cluster diffuses
+              through the blur instead of muddying the text behind it. */}
+          <div className="hero-glass flex flex-col items-center text-center lg:items-start lg:text-left">
+            <div className="hero-eyebrow inline-flex max-w-full items-center gap-2 rounded-full border border-accent-primary/45 bg-accent-primary/25 px-3.5 py-1.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-[1.6px] sm:tracking-[2.5px] text-[#DDE3FF] mb-6 sm:mb-7">
               <Sparkles className="w-3.5 h-3.5 shrink-0" />
-              <span>AI Voice Agents for Home Services</span>
+              {/* Full wording needs more room than a small phone has, so the
+                  short form is used there rather than letting the pill wrap. */}
+              <span className="whitespace-nowrap sm:hidden">AI Voice Agents</span>
+              <span className="hidden whitespace-nowrap sm:inline">
+                AI Voice Agents for Home Services
+              </span>
             </div>
 
             {/* Headline — Epic Pro, italic */}
@@ -50,13 +57,13 @@ export const Hero = () => {
               Again
             </h1>
 
-            <p className="max-w-xl text-[15px] sm:text-lg text-text-muted leading-relaxed mb-9">
+            <p className="max-w-xl text-[15px] sm:text-lg text-text-muted leading-relaxed mb-8 sm:mb-9">
               AI voice receptionists that answer every ring, qualify leads, schedule jobs
               directly into your CRM, and dispatch emergencies — 24/7 across the United States.
             </p>
 
             {/* CTAs — full width and stacked on mobile, inline from sm up */}
-            <div className="flex w-full flex-col sm:flex-row sm:w-auto items-stretch sm:items-center gap-3.5 mb-10">
+            <div className="flex w-full flex-col sm:flex-row sm:w-auto items-stretch sm:items-center gap-3 sm:gap-3.5 mb-8 sm:mb-10">
               <a
                 href="https://calendly.com/saadakhtar2222/ai-receptionist-demo"
                 target="_blank"

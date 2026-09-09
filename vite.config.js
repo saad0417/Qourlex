@@ -11,6 +11,12 @@ export default defineConfig({
     port: 4173,
   },
   build: {
+    // Without an explicit target the CSS minifier decided only Safari's
+    // -webkit-backdrop-filter was needed and dropped the standard property,
+    // which silently disabled every frosted surface on the site in Chrome and
+    // Firefox. Naming a baseline that still includes a Safari needing the
+    // prefix makes it emit both.
+    cssTarget: ['chrome107', 'edge107', 'firefox104', 'safari16'],
     chunkSizeWarningLimit: 1500,
     rollupOptions: {
       output: {

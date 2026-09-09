@@ -9,7 +9,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { LinkedInIcon, InstagramIcon, FacebookIcon } from './SocialIcons';
-import { useGsapAnimation, gsap } from '../hooks/useGsapAnimation';
+import { useGsapAnimation, gsap, revealOffset } from '../hooks/useGsapAnimation';
 import { sendContactMessage } from '../utils/emailjs';
 
 export const Contact = () => {
@@ -48,14 +48,14 @@ export const Contact = () => {
     // Form slides in from left, info from right
     tl.fromTo(
       leftColRef.current,
-      { opacity: 0, x: -40 },
-      { opacity: 1, x: 0, duration: 0.7, ease: 'power3.out' }
+      { opacity: 0, ...revealOffset(-40, 1024) },
+      { opacity: 1, x: 0, y: 0, duration: 0.7, ease: 'power3.out' }
     );
 
     tl.fromTo(
       rightColRef.current,
-      { opacity: 0, x: 40 },
-      { opacity: 1, x: 0, duration: 0.7, ease: 'power3.out' },
+      { opacity: 0, ...revealOffset(40, 1024) },
+      { opacity: 1, x: 0, y: 0, duration: 0.7, ease: 'power3.out' },
       '-=0.5'
     );
   });
@@ -273,7 +273,7 @@ export const Contact = () => {
           {/* Right Column — Contact Info + CTA (5 cols) */}
           <div ref={rightColRef} className="lg:col-span-5 space-y-6">
             {/* Book a Demo Section */}
-            <div className="bg-card-bg rounded-2xl p-8 border border-border-divider shadow-xl">
+            <div className="bg-card-bg rounded-2xl p-6 sm:p-8 border border-border-divider shadow-xl">
               <div className="flex items-start gap-4 mb-4">
                 <div className="w-12 h-12 rounded-xl bg-accent-primary/15 flex items-center justify-center flex-shrink-0">
                   <CalendarCheck className="w-7 h-7 text-accent-primary" />
@@ -300,18 +300,18 @@ export const Contact = () => {
             </div>
 
             {/* Email Us Section */}
-            <div className="bg-card-bg rounded-2xl p-8 border border-border-divider shadow-xl">
-              <div className="flex items-center gap-4">
+            <div className="bg-card-bg rounded-2xl p-6 sm:p-8 border border-border-divider shadow-xl">
+              <div className="flex items-center gap-4 min-w-0">
                 <div className="w-12 h-12 rounded-xl bg-accent-secondary/15 flex items-center justify-center flex-shrink-0">
                   <Mail className="w-7 h-7 text-accent-secondary" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <h4 className="text-lg font-bold text-white mb-0.5">
                     Email Us
                   </h4>
                   <a
                     href="mailto:saadakhtar2222@gmail.com"
-                    className="text-text-link hover:underline text-sm sm:text-base font-medium transition-colors"
+                    className="inline-block py-1.5 -my-1.5 text-text-link hover:underline text-[13px] xs:text-sm sm:text-base font-medium transition-colors break-all"
                   >
                     saadakhtar2222@gmail.com
                   </a>
@@ -320,7 +320,7 @@ export const Contact = () => {
             </div>
 
             {/* Call or WhatsApp Section */}
-            <div className="bg-card-bg rounded-2xl p-8 border border-border-divider shadow-xl">
+            <div className="bg-card-bg rounded-2xl p-6 sm:p-8 border border-border-divider shadow-xl">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-xl bg-status-success/15 flex items-center justify-center flex-shrink-0">
                   <Phone className="w-7 h-7 text-status-success" />
@@ -331,7 +331,7 @@ export const Contact = () => {
                   </h4>
                   <a
                     href="tel:+923196515639"
-                    className="text-text-link hover:underline text-sm sm:text-base font-medium transition-colors"
+                    className="inline-block py-1.5 -my-1.5 text-text-link hover:underline text-sm sm:text-base font-medium transition-colors whitespace-nowrap"
                   >
                     +92 319 6515639
                   </a>

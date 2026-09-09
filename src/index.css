@@ -1,25 +1,159 @@
 /* -------------------------------------------------------------------------
-   Epic Pro (GC EPICPRO Demo Extra Bold, Glyphonic).
+   Epic Pro (GC Epic Pro Demo, Glyphonic) — all eight weights, 100 to 800.
 
-   LICENCE: the supplied file is the DEMO cut, which its READ-ME limits to
-   PERSONAL USE. This site is commercial, so a licence has to be bought from
-   the foundry before launch. See src/assets/fonts/EpicPro-LICENSE.txt.
+   LICENCE: this is the DEMO release, which its read-me limits to PERSONAL USE.
+   The site is commercial, so a licence has to be bought from Glyphonic before
+   launch. See src/assets/fonts/EpicPro-LICENSE.txt.
 
-   The demo cut also ships only A-Z, a-z, 0-9 and . , ? ! & — it has no
-   apostrophe, hyphen, colon or slash. Three section headings contain an
-   apostrophe, so Clash Display sits next in the stack and picks up exactly
-   those glyphs; it is the closest match to Epic Pro's proportions.
+   CHARACTER SET: the demo weights carry letters and nothing else — 55 glyphs,
+   A-Z and a-z. No digits and no punctuation at all. Two fallbacks close that:
 
-   Declared across the full weight range so every heading gets the real face
-   and the browser never synthesises a fake bold on top of an already
-   extra-bold design.
+     1. An earlier single-weight demo cut of the same typeface does include
+        0-9 and . , ? ! & — it is declared below under the same family with a
+        unicode-range limited to exactly those characters, so digits and full
+        stops still render in Epic Pro rather than dropping to another face.
+        Every face carries an explicit unicode-range for this reason: without
+        one the letter faces claim the whole of Unicode and the browser is left
+        to fall through them by declaration order to find a missing glyph.
+     2. Clash Display sits next in the stack for anything left, which in
+        practice is the apostrophe in three section headings. It is the closest
+        match to Epic Pro's proportions, so the substitution reads cleanly.
    ---------------------------------------------------------------------- */
 @font-face {
   font-family: 'Epic Pro';
-  src: url('./assets/fonts/EpicPro-ExtraBold.ttf') format('truetype');
-  font-weight: 400 900;
+  src: url('./assets/fonts/EpicPro-Thin.ttf') format('truetype');
+  font-weight: 100;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0020, U+0041-005A, U+0061-007A;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020, U+0041-005A, U+0061-007A;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020, U+0041-005A, U+0061-007A;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020, U+0041-005A, U+0061-007A;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020, U+0041-005A, U+0061-007A;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020, U+0041-005A, U+0061-007A;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020, U+0041-005A, U+0061-007A;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020, U+0041-005A, U+0061-007A;
+}
+
+/* Digits and punctuation, from the earlier cut of the same typeface.
+
+   Declared once per fixed weight rather than as a single `font-weight: 100 900`
+   face. Verified in Chrome: with a weight RANGE on a unicode-range face, the
+   browser never selects it and the characters fall through to the next family
+   — a fixed weight is picked up correctly. All eight rules point at the same
+   file, so it is still a single download. */
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Punctuation-ExtraBold.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0021, U+0026, U+002C, U+002E, U+003F, U+0030-0039;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Punctuation-ExtraBold.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0021, U+0026, U+002C, U+002E, U+003F, U+0030-0039;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Punctuation-ExtraBold.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0021, U+0026, U+002C, U+002E, U+003F, U+0030-0039;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Punctuation-ExtraBold.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0021, U+0026, U+002C, U+002E, U+003F, U+0030-0039;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Punctuation-ExtraBold.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0021, U+0026, U+002C, U+002E, U+003F, U+0030-0039;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Punctuation-ExtraBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0021, U+0026, U+002C, U+002E, U+003F, U+0030-0039;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Punctuation-ExtraBold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0021, U+0026, U+002C, U+002E, U+003F, U+0030-0039;
+}
+@font-face {
+  font-family: 'Epic Pro';
+  src: url('./assets/fonts/EpicPro-Punctuation-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0021, U+0026, U+002C, U+002E, U+003F, U+0030-0039;
 }
 
 @tailwind base;
@@ -39,6 +173,13 @@
     font-family: 'Epic Pro', 'Clash Display', 'Syne', 'Inter', system-ui, sans-serif;
     font-weight: 700;
     letter-spacing: -0.02em;
+    /* Splits headings evenly across their lines instead of leaving a single
+       orphaned word on the last one. */
+    text-wrap: balance;
+  }
+
+  h3 {
+    text-wrap: balance;
   }
 }
 
@@ -49,6 +190,14 @@
    paint box to cover the lean; box-decoration-break: clone re-applies it at
    every line fragment (otherwise a span that wraps is only padded on its final
    line); and the negative margin gives the space back so nothing shifts. */
+/* Epic Pro sets its capitals high in the em box: measured against the mark in
+   the header, the box centres perfectly but the ink sits 1.5px high at 20px,
+   i.e. 0.075em. Nudging by that amount centres the letters on the logo rather
+   than centring the box they sit in. */
+.brand-wordmark {
+  transform: translateY(0.075em);
+}
+
 .clip-safe {
   padding-right: 0.2em;
   margin-right: -0.2em;
@@ -119,10 +268,16 @@ body {
    ========================================================================= */
 
 /* Base Glass Container */
+/* NOTE ON --frost: the blur values are routed through a custom property on
+   purpose. Written literally, the CSS minifier compares the standard and
+   -webkit- declarations, decides the standard one is redundant, and emits only
+   the prefixed form — which silently disables the frost in Chrome and Firefox.
+   It cannot make that comparison through a var(), so both survive. */
 .apple-glass {
   background: rgba(30, 41, 59, 0.45);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  --frost: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow:
     inset 0 1px 1px 0 rgba(255, 255, 255, 0.16),
@@ -133,8 +288,9 @@ body {
 /* Interactive Card Glass */
 .apple-glass-card {
   background: rgba(30, 41, 59, 0.42);
-  backdrop-filter: blur(24px) saturate(190%);
-  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  --frost: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
   border: 1px solid rgba(255, 255, 255, 0.10);
   box-shadow:
     inset 0 1px 1px 0 rgba(255, 255, 255, 0.14),
@@ -156,19 +312,39 @@ body {
 /* Navigation Apple Liquid Glass */
 .apple-glass-nav {
   background: rgba(3, 7, 18, 0.68);
-  backdrop-filter: blur(28px) saturate(190%);
-  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  --frost: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
   border-bottom: 1px solid rgba(255, 255, 255, 0.09);
   box-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 0.12),
     0 10px 30px -10px rgba(0, 0, 0, 0.6);
 }
 
+/* Mobile menu control. The glass pill it used to sit on is nearly invisible
+   against the hero, and a nav control has to be findable at a glance. */
+.nav-burger {
+  background: rgba(99, 102, 241, 0.22);
+  border: 1px solid rgba(199, 210, 254, 0.42);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.24),
+    0 6px 18px -8px rgba(0, 0, 0, 0.75);
+  backdrop-filter: var(--frost, blur(14px));
+  -webkit-backdrop-filter: var(--frost, blur(14px));
+  --frost: blur(14px) saturate(160%);
+}
+
+.nav-burger:hover {
+  background: rgba(99, 102, 241, 0.34);
+  border-color: rgba(199, 210, 254, 0.62);
+}
+
 /* Glass Pill / Badges */
 .apple-glass-pill {
   background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  --frost: blur(14px);
+  -webkit-backdrop-filter: var(--frost);
+  backdrop-filter: var(--frost);
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: inset 0 1px 0.5px 0 rgba(255, 255, 255, 0.18);
 }
@@ -263,34 +439,100 @@ html.lenis, html.lenis body {
     radial-gradient(45% 45% at 30% 62%, rgba(37, 99, 235, 0.16) 0%, transparent 70%);
 }
 
-/* Below the split breakpoint the cluster sits behind centred copy, so it steps
-   back to keep the headline the clear focal point. */
 .hero-spheres__scrim {
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
 
+/* Below the split breakpoint the copy sits on the frosted panel, which does the
+   legibility work — so the cluster is left bright enough to actually show
+   through the blur as colour, and the scrim only softens the outer edges. */
 @media (max-width: 1023px) {
-  .hero-spheres {
-    opacity: 0.34;
-  }
   .hero-spheres__scrim {
     background: radial-gradient(
-      72% 58% at 50% 44%,
-      rgba(3, 7, 18, 0.7) 0%,
-      rgba(3, 7, 18, 0.42) 58%,
-      rgba(3, 7, 18, 0.12) 100%
+      82% 62% at 50% 44%,
+      rgba(3, 7, 18, 0) 0%,
+      rgba(3, 7, 18, 0.32) 62%,
+      rgba(3, 7, 18, 0.82) 100%
     );
   }
   .hero-spheres__glow {
-    background: radial-gradient(60% 50% at 50% 45%, rgba(79, 70, 229, 0.28) 0%, rgba(124, 58, 237, 0.12) 48%, transparent 72%);
+    background:
+      radial-gradient(95% 55% at 50% 26%, rgba(99, 102, 241, 0.17) 0%, rgba(124, 58, 237, 0.09) 48%, transparent 78%),
+      radial-gradient(80% 46% at 16% 62%, rgba(56, 118, 246, 0.09) 0%, transparent 74%),
+      radial-gradient(72% 44% at 88% 74%, rgba(168, 85, 247, 0.09) 0%, transparent 74%),
+      linear-gradient(180deg, rgba(49, 46, 129, 0.07) 0%, transparent 55%);
   }
 }
 
-@media (max-width: 767px) {
-  .hero-spheres {
-    opacity: 0.28;
+/* =========================================================================
+   HERO LIQUID GLASS PANEL (mobile and tablet only)
+   The cluster is left near full strength behind this, so the backdrop blur
+   picks its colour up and diffuses it the way frosted glass over a lit
+   surface does, instead of the cluster reading as a smudge behind the text.
+   ========================================================================= */
+@media (max-width: 1023px) {
+  .hero-glass {
+    position: relative;
+    isolation: isolate;
+    padding: 2rem 1.25rem 2.25rem;
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.19);
+    background: linear-gradient(
+      158deg,
+      rgba(72, 80, 116, 0.34) 0%,
+      rgba(24, 30, 52, 0.42) 46%,
+      rgba(45, 41, 84, 0.36) 100%
+    );
+    /* Heavy blur with a lift in saturation. Deliberately no brightness() in
+       here: with it in the list the CSS minifier emits only the -webkit- form
+       and drops the standard property, which silently disables the frost in
+       every browser. The lift it was providing now lives in the background
+       gradient below instead. */
+    --frost: blur(52px) saturate(155%);
+    -webkit-backdrop-filter: var(--frost);
+    backdrop-filter: var(--frost);
+    box-shadow:
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.34),
+      inset 0 -1px 1px 0 rgba(255, 255, 255, 0.08),
+      inset 0 0 50px 0 rgba(129, 140, 248, 0.1),
+      0 30px 60px -22px rgba(0, 0, 0, 0.7);
+  }
+
+  /* Body copy sits on a lighter ground here than it does on the page, so it
+     needs to come up a step to keep its contrast. */
+  .hero-glass p {
+    color: #CBD5E1;
+  }
+
+  /* The specular sliver along the top edge that sells the glass. */
+  .hero-glass::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 12%;
+    right: 12%;
+    height: 1px;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  }
+}
+
+@media (max-width: 400px) {
+  .hero-glass {
+    padding: 1.75rem 1rem 2rem;
+    border-radius: 26px;
+  }
+}
+
+/* Browsers without backdrop-filter get a solid panel rather than a
+   transparent box sitting over a bright cluster. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  @media (max-width: 1023px) {
+    .hero-glass {
+      background: rgba(9, 14, 30, 0.92);
+    }
   }
 }
 
@@ -303,4 +545,34 @@ html.lenis, html.lenis body {
 
 .client-strip::-webkit-scrollbar {
   display: none;
+}
+
+/* =========================================================================
+   STEP RAILS (How It Works)
+   A dashed rule drawn with a repeating gradient rather than a border, so it
+   can be masked. The mask fades both ends, which keeps the rail from running
+   hard into the numbered circles.
+   ========================================================================= */
+.step-rail {
+  --rail-color: #334155;
+}
+
+.step-rail--h {
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--rail-color) 0 7px,
+    transparent 7px 14px
+  );
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+}
+
+.step-rail--v {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--rail-color) 0 7px,
+    transparent 7px 14px
+  );
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 22%, #000 78%, transparent 100%);
 }

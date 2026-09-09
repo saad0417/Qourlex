@@ -42,7 +42,7 @@ export const Footer = () => {
                 <li key={idx}>
                   <a
                     href={link.href}
-                    className="text-[#64748B] hover:text-white text-sm transition-colors duration-200"
+                    className="inline-block py-1.5 text-[#64748B] hover:text-white text-sm transition-colors duration-200"
                   >
                     {link.label}
                   </a>

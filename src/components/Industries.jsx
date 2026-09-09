@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Wrench, Thermometer, Zap, Home, MessageSquare } from 'lucide-react';
-import { useGsapAnimation, gsap } from '../hooks/useGsapAnimation';
+import { useGsapAnimation, gsap, revealOffset } from '../hooks/useGsapAnimation';
 
 export const Industries = () => {
   const containerRef = useRef(null);
@@ -19,10 +19,11 @@ export const Industries = () => {
         const fromX = index % 2 === 0 ? -40 : 40;
         gsap.fromTo(
           card,
-          { opacity: 0, x: fromX },
+          { opacity: 0, ...revealOffset(fromX, 640) },
           {
             opacity: 1,
             x: 0,
+            y: 0,
             duration: 0.7,
             ease: 'power3.out',
             scrollTrigger: {

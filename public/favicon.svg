@@ -1,10 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect width="64" height="64" rx="16" fill="#030712"/>
-  <rect x="1" y="1" width="62" height="62" rx="15" stroke="#1E293B" stroke-width="2"/>
-  <circle cx="30" cy="30" r="18" stroke="#4F46E5" stroke-width="5" stroke-linecap="round"/>
-  <path d="M41 41L52 52" stroke="#7C3AED" stroke-width="5" stroke-linecap="round"/>
-  <!-- Audio wave bars inside the Q -->
-  <line x1="24" y1="26" x2="24" y2="34" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
-  <line x1="30" y1="21" x2="30" y2="39" stroke="#818CF8" stroke-width="2.5" stroke-linecap="round"/>
-  <line x1="36" y1="25" x2="36" y2="35" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Qourlex AI tab icon.
+
+       Just the Q letterform on a solid brand tile. The full mark's five-bar
+       waveform sits inside the counter, and at a 16px favicon those bars fall
+       well under a pixel wide and read as noise inside an already small ring.
+
+       The ring is deliberately thinner than the logo's (6.5 against a scaled
+       equivalent of ~9). What makes a Q legible at 16px is the counter, and a
+       heavier ring closes it up: compared side by side at 16px, the thinner
+       ring reads as a Q where the heavier one reads as a dot.
+
+       The tile stays mid-indigo rather than going near-black or white so the
+       icon holds contrast against both light and dark browser chrome. -->
+  <defs>
+    <linearGradient id="q-tile" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#4338CA"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="64" height="64" rx="14" fill="url(#q-tile)"/>
+
+  <circle cx="29.5" cy="31" r="20.5" stroke="#FFFFFF" stroke-width="6.5"/>
+  <path d="M32.5 41.5 L46 41.5 L58.5 56.5 L45.8 56.5 Z" fill="#FFFFFF"/>
 </svg>

@@ -11,7 +11,7 @@ import {
   PhoneCall,
   CheckCircle,
 } from 'lucide-react';
-import { useGsapAnimation, gsap } from '../hooks/useGsapAnimation';
+import { useGsapAnimation, gsap, revealOffset } from '../hooks/useGsapAnimation';
 
 export const Comparison = () => {
   const containerRef = useRef(null);
@@ -40,15 +40,15 @@ export const Comparison = () => {
     // Left column slides in from left
     tl.fromTo(
       leftColRef.current,
-      { opacity: 0, x: -50 },
-      { opacity: 1, x: 0, duration: 0.7, ease: 'power3.out' }
+      { opacity: 0, ...revealOffset(-50, 768) },
+      { opacity: 1, x: 0, y: 0, duration: 0.7, ease: 'power3.out' }
     );
 
     // Right column slides in from right
     tl.fromTo(
       rightColRef.current,
-      { opacity: 0, x: 50 },
-      { opacity: 1, x: 0, duration: 0.7, ease: 'power3.out' },
+      { opacity: 0, ...revealOffset(50, 768) },
+      { opacity: 1, x: 0, y: 0, duration: 0.7, ease: 'power3.out' },
       '-=0.5'
     );
 
@@ -100,7 +100,7 @@ export const Comparison = () => {
           {/* Left Column — Human Receptionist */}
           <div
             ref={leftColRef}
-            className="bg-card-bg/90 rounded-2xl p-8 sm:p-10 border border-border-divider relative overflow-hidden shadow-xl"
+            className="bg-card-bg/90 rounded-2xl p-6 sm:p-8 lg:p-10 border border-border-divider relative overflow-hidden shadow-xl"
             style={{
               borderTop: '3px solid #EF4444',
               backgroundColor: 'rgba(30, 41, 59, 0.85)',
@@ -109,11 +109,11 @@ export const Comparison = () => {
             {/* Subtle red gradient accent at top */}
             <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-status-danger/10 to-transparent pointer-events-none" />
 
-            <div className="flex items-center gap-3 mb-8 relative z-10">
+            <div className="flex flex-wrap items-center gap-3 mb-8 min-h-[40px] relative z-10">
               <div className="w-10 h-10 rounded-full bg-status-danger/15 flex items-center justify-center flex-shrink-0">
                 <X className="w-5 h-5 text-status-danger stroke-[2.5]" />
               </div>
-              <h3 className="text-2xl font-bold text-white">
+              <h3 className="text-xl sm:text-2xl font-bold text-white">
                 Human Receptionist
               </h3>
             </div>
@@ -122,11 +122,11 @@ export const Comparison = () => {
               {humanRows.map((row, index) => {
                 const Icon = row.icon;
                 return (
-                  <div key={index} className="flex items-center gap-4 py-2 border-b border-border-divider/50 last:border-0">
-                    <div className="w-8 h-8 rounded-lg bg-status-danger/10 flex items-center justify-center flex-shrink-0">
+                  <div key={index} className="flex items-start gap-3.5 sm:gap-4 py-2.5 border-b border-border-divider/50 last:border-0">
+                    <div className="w-8 h-8 mt-0.5 rounded-lg bg-status-danger/10 flex items-center justify-center flex-shrink-0">
                       <Icon className="w-4 h-4 text-status-danger" />
                     </div>
-                    <span className="text-[#94A3B8] text-base sm:text-lg font-medium">
+                    <span className="text-[#94A3B8] text-[15px] sm:text-lg font-medium text-pretty">
                       {row.text}
                     </span>
                   </div>
@@ -138,7 +138,7 @@ export const Comparison = () => {
           {/* Right Column — Qourlex AI */}
           <div
             ref={rightColRef}
-            className="bg-card-bg/90 rounded-2xl p-8 sm:p-10 border border-border-divider relative overflow-hidden shadow-2xl"
+            className="bg-card-bg/90 rounded-2xl p-6 sm:p-8 lg:p-10 border border-border-divider relative overflow-hidden shadow-2xl"
             style={{
               borderTop: '3px solid #10B981',
               backgroundColor: 'rgba(30, 41, 59, 0.85)',
@@ -147,16 +147,16 @@ export const Comparison = () => {
             {/* Subtle green gradient accent at top */}
             <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-status-success/10 to-transparent pointer-events-none" />
 
-            <div className="flex items-center justify-between mb-8 relative z-10">
+            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-3 mb-8 min-h-[40px] relative z-10">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-status-success/15 flex items-center justify-center flex-shrink-0">
                   <Check className="w-5 h-5 text-status-success stroke-[2.5]" />
                 </div>
-                <h3 className="text-2xl font-bold text-white">
+                <h3 className="text-xl sm:text-2xl font-bold text-white whitespace-nowrap">
                   Qourlex AI
                 </h3>
               </div>
-              <span className="text-xs uppercase font-bold tracking-wider px-3 py-1 rounded-full bg-status-success/15 text-status-success border border-status-success/30">
+              <span className="shrink-0 whitespace-nowrap text-[10px] sm:text-xs uppercase font-bold tracking-wider px-2.5 sm:px-3 py-1 rounded-full bg-status-success/15 text-status-success border border-status-success/30">
                 Recommended
               </span>
             </div>
@@ -165,11 +165,11 @@ export const Comparison = () => {
               {aiRows.map((row, index) => {
                 const Icon = row.icon;
                 return (
-                  <div key={index} className="flex items-center gap-4 py-2 border-b border-border-divider/50 last:border-0">
-                    <div className="w-8 h-8 rounded-lg bg-status-success/10 flex items-center justify-center flex-shrink-0">
+                  <div key={index} className="flex items-start gap-3.5 sm:gap-4 py-2.5 border-b border-border-divider/50 last:border-0">
+                    <div className="w-8 h-8 mt-0.5 rounded-lg bg-status-success/10 flex items-center justify-center flex-shrink-0">
                       <Icon className="w-4 h-4 text-status-success" />
                     </div>
-                    <span className="text-[#E2E8F0] text-base sm:text-lg font-semibold">
+                    <span className="text-[#E2E8F0] text-[15px] sm:text-lg font-semibold text-pretty">
                       {row.text}
                     </span>
                   </div>
