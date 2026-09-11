@@ -84,7 +84,7 @@ const CONFIG = {
   // The lit orb the shell opens around, and the brand mark that sits on it.
   core: {
     radius: 0.6,
-    glowScale: 2.9,     // sprite diameter, in world units
+    glowScale: 3.2,     // sprite diameter, in world units
     // Measured from the rendered artwork: once centred on its centroid, the
     // furthest ink (the tail tip) sits at 0.621 of the plane's width. 0.79
     // therefore puts it 0.49 out against an orb radius of 0.6, leaving an even
@@ -197,7 +197,7 @@ function createLogoTexture() {
 /* A radial falloff, used as a sprite behind the orb. A bare sphere with a basic
    material silhouettes as a flat disc; this is what makes it read as lit. */
 function createGlowTexture() {
-  const size = 256;
+  const size = 512;
   const canvas = document.createElement('canvas');
   canvas.width = canvas.height = size;
   const ctx = canvas.getContext('2d');
@@ -205,9 +205,13 @@ function createGlowTexture() {
 
   const c = size / 2;
   const gradient = ctx.createRadialGradient(c, c, 0, c, c, c);
-  gradient.addColorStop(0, 'rgba(224, 231, 255, 0.95)');
-  gradient.addColorStop(0.28, 'rgba(165, 180, 252, 0.5)');
-  gradient.addColorStop(0.6, 'rgba(99, 102, 241, 0.16)');
+  // Pure bright core radiating out past the sphere rim (~0.38 of radius)
+  gradient.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
+  gradient.addColorStop(0.24, 'rgba(238, 242, 255, 0.98)');
+  gradient.addColorStop(0.38, 'rgba(215, 225, 255, 0.92)'); // Right at the sphere rim
+  gradient.addColorStop(0.50, 'rgba(180, 195, 255, 0.72)'); // Radiant luminous halo just outside the sphere
+  gradient.addColorStop(0.66, 'rgba(129, 140, 248, 0.42)'); // Electric indigo/blue glow into the balls
+  gradient.addColorStop(0.82, 'rgba(99, 102, 241, 0.16)'); // Soft outer tail
   gradient.addColorStop(1, 'rgba(79, 70, 229, 0)');
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, size, size);
@@ -231,8 +235,8 @@ function CoreOrb() {
 
   useFrame((state) => {
     if (glowRef.current) {
-      // A slow breath, so the orb reads as lit rather than painted on.
-      const pulse = 1 + Math.sin(state.clock.elapsedTime * 0.9) * 0.05;
+      // A slow gentle breath, so the orb reads as lit rather than painted on.
+      const pulse = 1 + Math.sin(state.clock.elapsedTime * 1.1) * 0.06;
       glowRef.current.scale.setScalar(CONFIG.core.glowScale * pulse);
     }
 
@@ -250,11 +254,11 @@ function CoreOrb() {
   return (
     <group>
       {glowTexture && (
-        <sprite ref={glowRef} scale={CONFIG.core.glowScale}>
+        <sprite ref={glowRef} scale={CONFIG.core.glowScale} position={[0, 0, 0]}>
           <spriteMaterial
             map={glowTexture}
             transparent
-            opacity={0.85}
+            opacity={0.95}
             blending={THREE.AdditiveBlending}
             depthWrite={false}
             toneMapped={false}
@@ -264,7 +268,7 @@ function CoreOrb() {
 
       <mesh>
         <sphereGeometry args={[CONFIG.core.radius, 48, 48]} />
-        <meshBasicMaterial color="#E4E9FF" toneMapped={false} />
+        <meshBasicMaterial color="#EBF0FF" toneMapped={false} />
       </mesh>
 
       {logoTexture && (
@@ -281,7 +285,7 @@ function CoreOrb() {
         </group>
       )}
 
-      <pointLight color="#A5B4FC" intensity={3.6} distance={7.5} decay={2} />
+      <pointLight color="#C7D2FE" intensity={4.8} distance={8.5} decay={2} />
     </group>
   );
 }
