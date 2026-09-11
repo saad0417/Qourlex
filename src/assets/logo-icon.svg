@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="qourlex-bars-grad" x1="30" y1="40" x2="98" y2="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4F46E5" />
+      <stop offset="50%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#7C3AED" />
+    </linearGradient>
+  </defs>
+
+  <!-- Q Ring (Pure White, Exact logo3.png Geometry) -->
+  <circle
+    cx="60.4"
+    cy="64.0"
+    r="45.4"
+    stroke="#FFFFFF"
+    stroke-width="18.2"
+    fill="none"
+  />
+
+  <!-- Q Diagonal Tail -->
+  <path
+    d="M 68.75 88.54 L 86.93 88.54 L 122.0 118.14 L 95.13 118.14 Z"
+    fill="#FFFFFF"
+  />
+
+  <!-- 5 Voice Waveform Bars (100% Transparent Background, Vibrantly Colored) -->
+  <g fill="url(#qourlex-bars-grad)">
+    <rect x="34.03" y="58.45" width="7.32" height="11.58" rx="3.66" />
+    <rect x="45.30" y="50.16" width="7.32" height="28.16" rx="3.66" />
+    <rect x="56.64" y="41.15" width="7.32" height="46.17" rx="3.66" />
+    <rect x="68.06" y="50.16" width="7.32" height="28.16" rx="3.66" />
+    <rect x="79.32" y="58.45" width="7.32" height="11.58" rx="3.66" />
+  </g>
+</svg>

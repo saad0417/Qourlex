@@ -79,18 +79,20 @@ export const Problem = () => {
           </h2>
         </div>
 
-        {/* 3 Apple Glass Stat Cards - compact & elegant width */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        {/* 3 Apple Glass Stat Cards - equal uniform height & refined width */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-[890px] mx-auto items-stretch">
           {/* Card 1 */}
           <div
             ref={(el) => { cardsRef.current[0] = el; }}
-            className="apple-glass-card rounded-2xl py-8 px-6 sm:py-9 sm:px-6 md:p-8 text-center border border-white/15 flex flex-col justify-center items-center group relative overflow-hidden max-w-[290px] sm:max-w-none mx-auto w-full"
+            className="apple-glass-card rounded-2xl py-7 px-4 text-center border border-white/15 flex flex-col justify-center items-center group relative overflow-hidden max-w-[275px] sm:max-w-none mx-auto w-full min-h-[190px] h-full"
           >
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-accent-primary to-transparent opacity-60" />
-            <div className="font-display text-5xl sm:text-6xl md:text-[64px] font-extrabold text-accent-primary mb-4 leading-none group-hover:scale-105 transition-transform duration-300">
-              <AnimatedCounter end={78} suffix="%" duration={2} />
+            <div className="h-12 flex items-center justify-center mb-3 w-full">
+              <div className="font-display text-4xl sm:text-5xl md:text-[46px] font-extrabold text-accent-primary leading-none group-hover:scale-105 transition-transform duration-300">
+                <AnimatedCounter end={78} suffix="%" duration={2} />
+              </div>
             </div>
-            <p className="text-text-muted text-sm sm:text-base leading-relaxed">
+            <p className="text-text-muted text-xs sm:text-sm leading-relaxed max-w-[210px] mx-auto min-h-[38px] flex items-center justify-center">
               of customers hire the first company that answers
             </p>
           </div>
@@ -98,13 +100,15 @@ export const Problem = () => {
           {/* Card 2 */}
           <div
             ref={(el) => { cardsRef.current[1] = el; }}
-            className="apple-glass-card rounded-2xl py-8 px-6 sm:py-9 sm:px-6 md:p-8 text-center border border-white/15 flex flex-col justify-center items-center group relative overflow-hidden max-w-[290px] sm:max-w-none mx-auto w-full"
+            className="apple-glass-card rounded-2xl py-7 px-4 text-center border border-white/15 flex flex-col justify-center items-center group relative overflow-hidden max-w-[275px] sm:max-w-none mx-auto w-full min-h-[190px] h-full"
           >
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-status-danger to-transparent opacity-60" />
-            <div className="font-display text-5xl sm:text-6xl md:text-[64px] font-extrabold text-status-danger mb-4 leading-none group-hover:scale-105 transition-transform duration-300">
-              <AnimatedCounter end={50000} prefix="$" suffix="+" duration={2.2} />
+            <div className="h-12 flex items-center justify-center mb-3 w-full">
+              <div className="font-display text-[28px] xs:text-3xl sm:text-[34px] md:text-[36px] lg:text-[38px] font-extrabold text-status-danger leading-none tracking-tight whitespace-nowrap group-hover:scale-105 transition-transform duration-300">
+                <AnimatedCounter end={50000} prefix="$" suffix="+" duration={2.2} />
+              </div>
             </div>
-            <p className="text-text-muted text-sm sm:text-base leading-relaxed">
+            <p className="text-text-muted text-xs sm:text-sm leading-relaxed max-w-[210px] mx-auto min-h-[38px] flex items-center justify-center">
               lost per year from missed calls
             </p>
           </div>
@@ -112,13 +116,15 @@ export const Problem = () => {
           {/* Card 3 */}
           <div
             ref={(el) => { cardsRef.current[2] = el; }}
-            className="apple-glass-card rounded-2xl py-8 px-6 sm:py-9 sm:px-6 md:p-8 text-center border border-white/15 flex flex-col justify-center items-center group relative overflow-hidden max-w-[290px] sm:max-w-none mx-auto w-full"
+            className="apple-glass-card rounded-2xl py-7 px-4 text-center border border-white/15 flex flex-col justify-center items-center group relative overflow-hidden max-w-[275px] sm:max-w-none mx-auto w-full min-h-[190px] h-full"
           >
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-accent-secondary to-transparent opacity-60" />
-            <div className="font-display text-5xl sm:text-6xl md:text-[64px] font-extrabold text-accent-secondary mb-4 leading-none group-hover:scale-105 transition-transform duration-300">
-              <AnimatedCounter end={62} suffix="%" duration={1.8} />
+            <div className="h-12 flex items-center justify-center mb-3 w-full">
+              <div className="font-display text-4xl sm:text-5xl md:text-[46px] font-extrabold text-accent-secondary leading-none group-hover:scale-105 transition-transform duration-300">
+                <AnimatedCounter end={62} suffix="%" duration={1.8} />
+              </div>
             </div>
-            <p className="text-text-muted text-sm sm:text-base leading-relaxed">
+            <p className="text-text-muted text-xs sm:text-sm leading-relaxed max-w-[210px] mx-auto min-h-[38px] flex items-center justify-center">
               of calls go unanswered after business hours
             </p>
           </div>
