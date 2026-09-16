@@ -34,7 +34,6 @@ export const sendContactMessage = async (formData) => {
     message: formData.message || 'No additional message provided',
   };
   
-  console.log('Service ID:', EMAILJS_CONFIG.serviceId);
   try {
     const response = await emailjs.send(
       EMAILJS_CONFIG.serviceId,
