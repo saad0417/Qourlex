@@ -7,12 +7,12 @@ import emailjs from '@emailjs/browser';
  * keys are designed to be exposed in the browser.
  */
 export const EMAILJS_CONFIG = {
-  serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_kzciqrl',
-  templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_d2n4qtd',
-  publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'nHVvy8cM-oOTG5qRt',
+  serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID,
+  templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+  publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
 };
 
-const CONTACT_EMAIL = 'saadakhtar2222@gmail.com';
+const CONTACT_EMAIL = 'qourlexai@gmail.com';
 
 /**
  * Sends a contact form inquiry via EmailJS.
@@ -33,7 +33,8 @@ export const sendContactMessage = async (formData) => {
     company: formData.company || 'Not provided',
     message: formData.message || 'No additional message provided',
   };
-
+  
+  console.log('Service ID:', EMAILJS_CONFIG.serviceId);
   try {
     const response = await emailjs.send(
       EMAILJS_CONFIG.serviceId,
@@ -41,7 +42,6 @@ export const sendContactMessage = async (formData) => {
       templateParams,
       EMAILJS_CONFIG.publicKey
     );
-
     if (response.status === 200 || response.text === 'OK') {
       return {
         success: true,
